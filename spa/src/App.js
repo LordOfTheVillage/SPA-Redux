@@ -10,7 +10,7 @@ import {
   createRoutesFromElements,
   Navigate,
 } from 'react-router-dom'
-import Notfoundpage from './routes/Notfoundpage'
+import NotfoundPage from './routes/NotfoundPage'
 import CreateUser from './routes/CreateUser'
 import CreateAlbum from './routes/CreateAlbum'
 
@@ -24,7 +24,7 @@ const router = createBrowserRouter(
       <Route path="albums" element={<Albums />} />
       <Route path="albums/:id" element={<Album />} />
       <Route path="albums/create" element={<CreateAlbum />}></Route>
-      <Route path="/*" element={<Notfoundpage />} />
+      <Route path="/*" element={<NotfoundPage />} />
     </Route>
   )
 )

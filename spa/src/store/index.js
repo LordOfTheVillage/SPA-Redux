@@ -1,5 +1,5 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux'
-import albumsReducer from './albums/albumsReduser'
+import albumsReducer from './albums/albumsReducer'
 import usersReducer from './users/usersReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'

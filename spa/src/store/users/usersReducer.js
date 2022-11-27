@@ -17,8 +17,8 @@ const usersReducer = (state = defaultState, action) => {
     case ADD_USERS:
       return {
         ...state,
+        error: false,
         loading: false,
-        error: null,
         users: [...action.payload],
       }
     case GET_USER:

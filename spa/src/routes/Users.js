@@ -1,13 +1,7 @@
-import { Suspense, useEffect } from 'react'
-import {
-  defer,
-  Link,
-  useLoaderData,
-  Await,
-  useNavigate,
-} from 'react-router-dom'
-import { getData, getUsers } from '../api'
+import { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { fetchUsers } from '../store/users/actions'
 
 export default function Users() {
   const dispatch = useDispatch()
@@ -16,7 +10,7 @@ export default function Users() {
   const toCreateUserPage = () => navigate('create')
 
   useEffect(() => {
-    if (users.length === 0) dispatch(getUsers())
+    if (users.length === 0) dispatch(fetchUsers())
   }, [])
 
   return (
@@ -40,8 +34,9 @@ export default function Users() {
           })}
         </div>
       ) : (
-        // TODO EMPTYDATA COMPONENT
-        <button onClick={() => dispatch(fetchUsers())}>Add users</button>
+        <>
+          <h1>Loading...</h1>
+        </>
       )}
     </div>
   )

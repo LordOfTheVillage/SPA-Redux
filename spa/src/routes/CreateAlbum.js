@@ -1,18 +1,22 @@
-import { Suspense } from "react"
-import { Await, useLoaderData } from "react-router-dom"
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUsers } from '../store/users/actions'
 
 export default function CreateAlbum() {
-  const { users } = useLoaderData()
+  const dispatch = useDispatch()
+  const users = useSelector((state) => state.users.users)
+
+  useEffect(() => {
+    if (users.length === 0) dispatch(fetchUsers())
+  }, [])
+
   return (
     <>
       <div className="my-10">
         <form className="flex w-1/3 h-36 justify-between mx-auto flex-col">
           <select className="border border-gray-400 mr-0 px-3 pb-1 rounded-sm md:mr-8">
-            <Suspense fallback={<h3>Loading...</h3>}>
-              <Await resolve={users}>
-                {(resolved) => resolved.map((u) => <option>{u.name}</option>)}
-              </Await>
-            </Suspense>
+            {users.length &&
+              users.map((u) => <option key={u.id}>{u.name}</option>)}
           </select>
           <input
             type="text"

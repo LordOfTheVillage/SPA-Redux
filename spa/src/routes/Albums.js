@@ -1,13 +1,8 @@
-import { Suspense, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  defer,
-  Await,
-  Link,
-  useLoaderData,
-  useNavigate,
-} from 'react-router-dom'
-import { getAlbums, getData } from '../api'
+import { useNavigate } from 'react-router-dom'
+import AlbumList from '../components/AlbumList'
+import { fetchAlbums } from '../store/albums/actions'
 
 export default function Albums() {
   const dispatch = useDispatch()
@@ -16,7 +11,7 @@ export default function Albums() {
   const toCreateAlbumPage = () => navigate('create')
 
   useEffect(() => {
-    dispatch(getAlbums())
+    if (!albums.length) dispatch(fetchAlbums())
   }, [])
 
   return (
@@ -29,24 +24,15 @@ export default function Albums() {
           Create new album
         </button>
       </div>
-      <div className="text-gray-700 ml-8 flex flex-col justify-between">
-        {albums.map((album) => {
-          return (
-            <Link key={album.id} to={`/albums/${album.id}`}>
-              <span className="flex items-center pb-1.5">
-                <img
-                  src="/icons/album-icon.png"
-                  className="w-4 mt-1 h-4 mr-1"
-                  alt="album"
-                />
-                <p className="hover:underline first-letter:capitalize">
-                  {album.title}
-                </p>
-              </span>
-            </Link>
-          )
-        })}
-      </div>
+      {albums.length > 0 ? (
+        <div className="ml-8">
+          <AlbumList albums={albums}></AlbumList>
+        </div>
+      ) : (
+        <>
+          <h1>Loading...</h1>
+        </>
+      )}
     </div>
   )
 }

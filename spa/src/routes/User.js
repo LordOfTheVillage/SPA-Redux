@@ -21,14 +21,16 @@ export default function User() {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [checkingUser, setCheckingUser] = useState(true)
   const user = useSelector((state) => state.users.activeUser)
   const albums = useSelector((state) => state.albums.userAlbums)
-  // const loading = useSelector((state) => state.users.loading)
+  const loading = useSelector((state) => state.users.loading)
 
   const goBack = () => navigate(-1)
   const goToNotfoundedpage = () => navigate('/undefined')
 
   useEffect(() => {
+    setCheckingUser(false)
     dispatch(getUserAlbums(id))
     dispatch(getUser(id))
   }, [])
@@ -43,7 +45,7 @@ export default function User() {
           Go back
         </button>
       </div>
-      {!user.username ? (
+      {!user.username && !loading && !checkingUser ? (
         goToNotfoundedpage()
       ) : (
         <div className="flex flex-col">
@@ -54,7 +56,7 @@ export default function User() {
             <ul className="list-none">
               <li>Username: {user.username}</li>
               <li>Email: {user.email}</li>
-              <li>Phone: {user.phone.replaceAll('.', '-')}</li>
+              <li>Phone: {toString(user.phone).replaceAll('.', '-')}</li>
               <li>Site: {user.website}</li>
             </ul>
           </div>

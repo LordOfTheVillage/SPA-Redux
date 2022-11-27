@@ -59,7 +59,7 @@ export default function User() {
           </div>
         </>
       ) : (
-        <>Hello</>
+        <h1>Loading...</h1>
       )}
     </div>
   )

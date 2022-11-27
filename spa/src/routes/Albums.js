@@ -12,7 +12,7 @@ export default function Albums() {
 
   useEffect(() => {
     if (!albums.length) dispatch(fetchAlbums())
-  }, [])
+  }, [albums, dispatch])
 
   return (
     <div className="flex flex-row-reverse justify-between my-5">

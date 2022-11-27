@@ -11,7 +11,7 @@ export default function Users() {
 
   useEffect(() => {
     if (users.length === 0) dispatch(fetchUsers())
-  }, [])
+  }, [users, dispatch])
 
   return (
     <div className="flex flex-row-reverse justify-between my-5">

@@ -8,7 +8,7 @@ export default function CreateAlbum() {
 
   useEffect(() => {
     if (users.length === 0) dispatch(fetchUsers())
-  }, [])
+  }, [users, dispatch])
 
   return (
     <>

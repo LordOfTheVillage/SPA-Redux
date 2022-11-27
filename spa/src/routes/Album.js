@@ -22,7 +22,7 @@ export default function Album() {
     if (album.id !== +id) {
       dispatch(fetchAlbum(id))
     }
-  }, [])
+  }, [album, id, dispatch])
 
   useEffect(() => {
     if (album.id && user.id !== album.userId) dispatch(fetchUser(album.userId))

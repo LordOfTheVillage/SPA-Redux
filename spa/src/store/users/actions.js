@@ -1,22 +1,30 @@
 import { getUser, getUsers } from '../../api'
-import { addUsersAction, getUserAction } from './usersReducer'
+import {
+  addUsersAction,
+  fetchSuccessAction,
+  fetchErrorAction,
+  fetchStartAction,
+  getUserAction,
+} from './usersReducer'
 
 export const fetchUser = (id) => async (dispatch) => {
-  dispatch({ type: 'FETCH_START' })
+  dispatch(fetchStartAction())
   try {
     const user = await getUser(id)
     dispatch(getUserAction(user))
+    dispatch(fetchSuccessAction())
   } catch (e) {
-    dispatch({ type: 'FETCH_ERROR', payload: e.message })
+    dispatch(fetchErrorAction(e.message))
   }
 }
 
 export const fetchUsers = () => async (dispatch) => {
-  dispatch({ type: 'FETCH_START' })
+  dispatch(fetchStartAction())
   try {
     const users = await getUsers()
     dispatch(addUsersAction(users))
+    dispatch(fetchSuccessAction())
   } catch (e) {
-    dispatch({ type: 'FETCH_ERROR', payload: e.message })
+    dispatch(fetchErrorAction(e.message))
   }
 }

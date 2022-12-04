@@ -1,27 +1,25 @@
 import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUsers } from '../store/users/actions'
 
 export default function Users() {
   const dispatch = useDispatch()
   const users = useSelector((state) => state.users.users)
-  const navigate = useNavigate()
-  const toCreateUserPage = () => navigate('create')
 
   useEffect(() => {
-    if (users.length === 0) dispatch(fetchUsers())
+    dispatch(fetchUsers())
   }, [users, dispatch])
 
   return (
     <div className="flex flex-row-reverse justify-between my-5">
       <div className=" h-1/5 flex justify-end">
-        <button
+        <Link
           className="border border-gray-400 mr-0 px-3 pb-1 rounded-sm md:mr-8 hover:border-blue-600 hover:text-blue-600"
-          onClick={toCreateUserPage}
+          to={'create'}
         >
           Create new user
-        </button>
+        </Link>
       </div>
       {users.length > 0 ? (
         <div className="text-gray-700 ml-8 flex flex-col justify-between">

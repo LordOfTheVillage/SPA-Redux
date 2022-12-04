@@ -7,7 +7,7 @@ export default function CreateAlbum() {
   const users = useSelector((state) => state.users.users)
 
   useEffect(() => {
-    if (users.length === 0) dispatch(fetchUsers())
+    dispatch(fetchUsers())
   }, [users, dispatch])
 
   return (

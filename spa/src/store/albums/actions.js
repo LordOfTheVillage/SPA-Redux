@@ -1,22 +1,30 @@
 import { getAlbum, getAlbums } from '../../api'
-import { addAlbumsAction, getAlbumAction } from './albumsReducer'
+import {
+  addAlbumsAction,
+  fetchErrorAction,
+  fetchStartAction,
+  fetchSuccessAction,
+  getAlbumAction,
+} from './albumsReducer'
 
 export const fetchAlbum = (id) => async (dispatch) => {
-  dispatch({ type: 'FETCH_START' })
+  dispatch(fetchStartAction())
   try {
     const album = await getAlbum(id)
     dispatch(getAlbumAction(album))
+    dispatch(fetchSuccessAction())
   } catch (e) {
-    dispatch({ type: 'FETCH_ERROR', payload: e.message })
+    dispatch(fetchErrorAction(e.message))
   }
 }
 
 export const fetchAlbums = () => async (dispatch) => {
-  dispatch({ type: 'FETCH_START' })
+  dispatch(fetchStartAction())
   try {
     const albums = await getAlbums()
     dispatch(addAlbumsAction(albums))
+    dispatch(fetchSuccessAction())
   } catch (e) {
-    dispatch({ type: 'FETCH_ERROR', payload: e.message })
+    dispatch(fetchErrorAction(e.message))
   }
 }

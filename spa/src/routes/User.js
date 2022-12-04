@@ -1,25 +1,30 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import AlbumList from '../components/AlbumList'
 import { fetchAlbums } from '../store/albums/actions'
 import { fetchUser } from '../store/users/actions'
+import { getElementById } from '../config'
 
 export default function User() {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.users.activeUser)
+  const users = useSelector((state) => state.users.users)
   const albums = useSelector((state) => state.albums.albums)
   const error = useSelector((state) => state.users.error)
+  const loading = useSelector((state) => state.users.loading)
+  const [user, setUser] = useState({})
 
   const goBack = () => navigate(-1)
   const goToNotfoundPage = () => navigate('/undefined')
 
   useEffect(() => {
+    const suspect = getElementById(users, +id) || null
     if (!albums.length) dispatch(fetchAlbums())
-    if (user.id !== +id) dispatch(fetchUser(id))
-  }, [user, albums, id, dispatch])
+    if (!suspect && !loading) dispatch(fetchUser(id))
+    else setUser(suspect || {})
+  }, [users, albums, id, dispatch])
 
   return (
     <div className="flex justify-between flex-row-reverse px-0 py-4 md:px-10">

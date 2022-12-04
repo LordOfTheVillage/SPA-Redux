@@ -1,41 +1,31 @@
 const ADD_ALBUMS = 'ADD_ALBUMS'
 const GET_ALBUM = 'GET_ALBUM'
-const GET_USER_ALBUMS = 'GET_USER_ALBUMS'
-const FETCH_ERROR = 'FETCH_ERROR'
-const FETCH_START = 'FETCH_START'
+const FETCH_ALBUM_ERROR = 'FETCH_ALBUM_ERROR'
+const FETCH_ALBUM_START = 'FETCH_ALBUM_START'
+const FETCH_ALBUM_SUCCESS = 'FETCH_ALBUM_SUCCESS'
 const defaultState = {
   albums: [],
   activeAlbum: {},
-  userAlbums: [],
   loading: false,
   error: null,
 }
 const albumsReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case FETCH_START:
+    case FETCH_ALBUM_START:
       return { ...state, loading: true }
-    case FETCH_ERROR:
+    case FETCH_ALBUM_ERROR:
       return { ...state, loading: false, error: true }
+    case FETCH_ALBUM_SUCCESS:
+      return { ...state, loading: false, error: false }
     case ADD_ALBUMS:
       return {
         ...state,
-        loading: false,
-        error: false,
         albums: [...action.payload],
       }
     case GET_ALBUM:
       return {
         ...state,
-        loading: false,
-        error: null,
-        activeAlbum: action.payload,
-      }
-    case GET_USER_ALBUMS:
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        userAlbums: [...action.payload],
+        albums: [...state.albums, action.payload],
       }
     default:
       return state
@@ -43,8 +33,10 @@ const albumsReducer = (state = defaultState, action) => {
 }
 export const addAlbumsAction = (payload) => ({ type: ADD_ALBUMS, payload })
 export const getAlbumAction = (payload) => ({ type: GET_ALBUM, payload })
-export const getUserAlbumsAction = (payload) => ({
-  type: GET_USER_ALBUMS,
+export const fetchErrorAction = (payload) => ({
+  type: FETCH_ALBUM_ERROR,
   payload,
 })
+export const fetchStartAction = () => ({ type: FETCH_ALBUM_START })
+export const fetchSuccessAction = () => ({ type: FETCH_ALBUM_SUCCESS })
 export default albumsReducer

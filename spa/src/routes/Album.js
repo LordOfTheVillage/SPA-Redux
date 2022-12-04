@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { getElementById } from '../config'
 import { fetchAlbum } from '../store/albums/actions'
 import { fetchUser } from '../store/users/actions'
 
@@ -8,25 +9,30 @@ export default function Album() {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const album = useSelector((state) => state.albums.activeAlbum)
-  const user = useSelector((state) => state.users.activeUser)
+  const albums = useSelector((state) => state.albums.albums)
   const error = useSelector((state) => state.albums.error)
+  const loadingAlbum = useSelector((state) => state.albums.loading)
+  const users = useSelector((state) => state.users.users)
+  const loadingUser = useSelector((state) => state.users.loading)
+  const [user, setUser] = useState({})
+  const [album, setAlbum] = useState({})
 
   const goBack = () => navigate(-1)
-  const goToUser = (album) => {
-    return navigate(`/users/${album.userId}`)
-  }
   const goToNotfoundPage = () => navigate('/undefined')
 
   useEffect(() => {
-    if (album.id !== +id) {
-      dispatch(fetchAlbum(id))
-    }
-  }, [album, id, dispatch])
+    const suspect = getElementById(albums, +id) || null
+    if (!suspect) dispatch(fetchAlbum(id))
+    else setAlbum(suspect || {})
+  }, [albums, id, dispatch])
 
   useEffect(() => {
-    if (album.id && user.id !== album.userId) dispatch(fetchUser(album.userId))
-  }, [album])
+    if (album.id) {
+      const suspect = getElementById(users, +album.userId) || null
+      if (!suspect) dispatch(fetchUser(album.userId))
+      else setUser(suspect || {})
+    }
+  }, [album, users, id, dispatch])
 
   return (
     <>
@@ -41,12 +47,9 @@ export default function Album() {
               </h2>
               <div className="flex text-gray-500">
                 <p className="mr-2">Created by: </p>
-                <button
-                  className="hover:underline"
-                  onClick={() => goToUser(album)}
-                >
-                  {user.name}
-                </button>
+                <Link className="hover:underline" to={`/users/${album.userId}`}>
+                  {loadingUser ? <h1>Loading...</h1> : user.name}
+                </Link>
               </div>
             </div>
             <div className=" h-1/5 flex justify-end">
